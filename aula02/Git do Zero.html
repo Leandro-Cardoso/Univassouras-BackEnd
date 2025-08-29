@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Git do Zero</title>
+  <style>
+	body {
+  	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  	background: #f9f9f9;
+  	color: #333;
+  	margin: 0;
+  	padding: 20px 40px;
+  	line-height: 1.6;
+	}
+
+	h1, h2, h3 {
+  	font-weight: 600;
+  	margin-top: 30px;
+  	margin-bottom: 10px;
+	}
+
+	h1 {
+  	border-bottom: 3px solid #007acc;
+  	padding-bottom: 8px;
+  	color: #007acc;
+	}
+
+	h2 {
+  	border-left: 4px solid #007acc;
+  	padding-left: 10px;
+  	color: #444;
+	}
+
+	h3 {
+  	color: #555;
+	}
+
+	code {
+  	background: #eee;
+  	padding: 2px 6px;
+  	border-radius: 4px;
+  	font-size: 14px;
+	}
+
+	pre {
+  	background: #272822;
+  	color: #f8f8f2;
+  	padding: 15px;
+  	border-radius: 6px;
+  	overflow-x: auto;
+  	margin: 15px 0;
+	}
+
+	pre code {
+  	background: none;
+  	padding: 0;
+  	color: inherit;
+	}
+
+	blockquote {
+  	border-left: 4px solid #007acc;
+  	padding: 10px 15px;
+  	background: #eef6fb;
+  	margin: 15px 0;
+  	font-style: italic;
+  	color: #333;
+	}
+
+	ul, ol {
+  	margin: 10px 0 20px 25px;
+	}
+
+	.highlight {
+  	background: #fff4c2;
+  	padding: 2px 6px;
+  	border-radius: 4px;
+  	font-weight: bold;
+	}
+
+	footer {
+  	text-align: center;
+  	margin-top: 50px;
+  	padding: 20px;
+  	font-size: 14px;
+  	color: #666;
+  	border-top: 1px solid #ccc;
+	}
+
+	.gitignore {
+  	background: #fef9e7;
+  	border-left: 4px solid #f39c12;
+  	padding: 10px 15px;
+  	margin: 20px 0;
+	}
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Laboratório de Programação Fullstack</h1>
+  <h2>📚 Universidade de Vassouras</h2>
+  <h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+  <h1>Git do Zero</h1>
+  <p>Nesta aula vamos aprender a <strong>instalar e configurar o Git do zero</strong>, desde verificar se está instalado, até criar um repositório local e conectá-lo ao GitHub.</p>
+
+  <hr />
+
+  <h2>1. Testando se o Git já está instalado</h2>
+  <p>Abra o <strong>Prompt de Comando (cmd)</strong> e digite:</p>
+  <pre><code>git --version</code></pre>
+  <ul>
+	<li>Se aparecer a versão do Git (ex: <code>git version 2.45.0</code>), já está instalado.</li>
+	<li>Se aparecer <span class="highlight">'git' não é reconhecido</span>, significa que você ainda não tem o Git instalado.</li>
+  </ul>
+
+  <blockquote>
+	🔎 Para leigos: é como perguntar para o computador “você já sabe falar Git?”.  
+	Se ele responder com uma versão, então está tudo certo.
+  </blockquote>
+
+  <hr />
+
+  <h2>2. Baixando e Instalando o Git</h2>
+  <ol>
+	<li>Acesse o site oficial: <a href="https://git-scm.com/downloads" target="_blank">https://git-scm.com/downloads</a></li>
+	<li>Escolha a versão para seu sistema operacional (Windows, Mac ou Linux).</li>
+	<li>No Windows: execute o instalador e deixe as opções padrão.</li>
+	<li>Finalize a instalação e abra novamente o <strong>cmd</strong>.</li>
+	<li>Digite novamente:
+  	<pre><code>git --version</code></pre>
+  	para confirmar que foi instalado corretamente.
+	</li>
+  </ol>
+
+  <blockquote>
+	💡 Dica: O Git instala também o <strong>Git Bash</strong>, um terminal mais completo e usado por desenvolvedores.
+  </blockquote>
+
+  <hr />
+
+  <h2>3. Configurando o Git pela primeira vez</h2>
+  <p>No terminal, defina seu nome e email (eles aparecerão nos seus commits):</p>
+  <pre><code>git config --global user.name "Seu Nome"
+git config --global user.email "seuemail@example.com"
+</code></pre>
+
+  <p>Para confirmar suas configurações:</p>
+  <pre><code>git config --list</code></pre>
+
+  <blockquote>
+	👶 Para leigos: é como assinar suas tarefas com nome e e-mail.  
+	Assim, quando você “salva uma versão” (commit), todos sabem quem foi o autor.
+  </blockquote>
+
+  <hr />
+
+  <h3>🔑 Removendo credenciais antigas</h3>
+  <p>Se houver outro usuário cadastrado e você quiser trocar:</p>
+  <ol>
+	<li>No Windows, abra o <strong>Painel de Controle</strong> → <strong>Gerenciador de Credenciais</strong>.</li>
+	<li>Vá em <strong>Credenciais do Windows</strong>.</li>
+	<li>Procure por entradas relacionadas ao Git, GitHub, GitLab ou Bitbucket, ex: <code>git:https://github.com</code>.</li>
+	<li>Remova essas entradas.</li>
+	<li>Na próxima vez que fizer <code>git pull</code> ou <code>git push</code>, o Git pedirá novo usuário e senha/token.</li>
+  </ol>
+
+  <blockquote>
+	🔄 Para leigos: é como apagar credenciais antigas do seu caderno, para poder escrever com seu novo nome.
+  </blockquote>
+
+  <hr />
+
+  <h2>4. Criando um Repositório Local</h2>
+  <ol>
+	<li>Escolha uma pasta no seu computador, ou crie uma nova:
+  	<pre><code>mkdir MeuProjeto
+cd MeuProjeto</code></pre>
+	</li>
+	<li>Inicialize o repositório Git dentro da pasta:
+  	<pre><code>git init</code></pre>
+  	Isso cria uma pasta oculta <code>.git</code> que guarda todo o histórico do seu projeto.
+	</li>
+	<li>Crie um arquivo para teste, ex:
+  	<pre><code>echo "# Meu Primeiro Projeto Git" > README.md</code></pre>
+	</li>
+	<li>Adicione e faça o commit inicial:
+  	<pre><code>git add .
+git commit -m "Primeiro commit"</code></pre>
+	</li>
+  </ol>
+
+  <blockquote>
+	📂 Para leigos: o <strong>repositório local</strong> é como uma pasta mágica no seu computador que lembra de tudo que você faz.  
+	Cada <strong>commit</strong> é como uma foto tirada do estado atual da pasta.
+  </blockquote>
+
+  <hr />
+
+  <h2>5. Criando um Repositório no GitHub</h2>
+  <ol>
+	<li>Acesse <a href="https://github.com" target="_blank">GitHub</a> e crie sua conta.</li>
+	<li>No canto superior direito, clique em <strong>New Repository</strong>.</li>
+	<li>Defina um nome, por exemplo: <code>meu-projeto</code>.</li>
+	<li>Não precisa marcar a opção de <code>README</code> (já criamos localmente).</li>
+	<li>Clique em <strong>Create repository</strong>.</li>
+  </ol>
+
+  <blockquote>
+	☁️ Para leigos: o GitHub é como o <strong>Google Drive</strong> dos programadores, mas com histórico completo das mudanças.
+  </blockquote>
+
+  <hr />
+
+  <h2>6. Conectando o Repositório Local ao GitHub</h2>
+  <pre><code>git branch //verifique o branch criado (master ou main)
+git remote add origin https://github.com/seu-usuario/meu-projeto.git
+git branch -M branch-criado
+git push -u origin branch-criado</code></pre>
+
+  <blockquote>
+	🚀 Para leigos: é como dizer “a partir de agora, essa pasta local está ligada à nuvem”.  
+	E com o <strong>push</strong> você faz o upload das suas fotos (commits).
+  </blockquote>
+
+  <hr />
+
+  <h2>7. Fluxo Básico do Dia a Dia</h2>
+  <ol>
+	<li>Editar ou criar arquivos no projeto.</li>
+	<li>Adicionar mudanças:
+  	<pre><code>git add .</code></pre>
+	</li>
+	<li>Salvar as alterações no histórico:
+  	<pre><code>git commit -m "Mensagem do que foi feito"</code></pre>
+	</li>
+	<li>Enviar para o GitHub:
+  	<pre><code>git push</code></pre>
+	</li>
+  </ol>
+
+  <blockquote>
+	🔄 Para leigos: pense no ciclo como “editar → preparar → fotografar → enviar para a nuvem”.
+  </blockquote>
+
+  <hr />
+
+  <section>
+	<h2>📖 Paralelo com Git</h2>
+	<ul>
+  	<li>📂 <strong>Diretório Local</strong> → Onde você trabalha nos arquivos.</li>
+  	<li>📝 <strong>Staging Area</strong> → Uma espécie de “sala de espera” antes de registrar no histórico.</li>
+  	<li>📜 <strong>Repositório Local</strong> → Onde ficam seus commits no computador.</li>
+  	<li>☁️ <strong>Repositório Remoto</strong> → A nuvem (GitHub, GitLab, Bitbucket), onde você compartilha com os outros.</li>
+	</ul>
+  </section>
+
+  <h2>8. O que é o <code>.gitignore</code>?</h2>
+  <p>O arquivo <code>.gitignore</code> diz ao Git quais arquivos ou pastas devem ser ignorados, ou seja, não precisam ser versionados.</p>
+
+  <blockquote class="gitignore">
+	🗑️ Para leigos: imagine que você tem uma mochila para levar coisas para a escola.  
+	Você só quer levar livros e cadernos (código fonte), mas não quer levar lixo ou papéis amassados (arquivos temporários).  
+	O <code>.gitignore</code> é a lista que diz o que <strong>não deve ir para a mochila</strong>.
+  </blockquote>
+
+  <h3>Exemplo de <code>.gitignore</code> para uma solução .NET Core:</h3>
+  <pre><code># Arquivos de usuário do Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.log
+*.vspscc
+*.vssscc
+*.cache
+*.pdb
+
+# Diretórios do Visual Studio
+.vs/
+TestResults/
+.nuget/
+packages/
+
+# Arquivos de configuração de publicação
+*.pubxml
+*.publishsettings
+
+# Arquivos de backup
+*.bak
+*.backup
+*.old
+
+# Arquivos do Resharper / Rider
+_ReSharper*/
+*.DotSettings.user
+.idea/
+
+# Arquivos de sistema
+Thumbs.db
+Desktop.ini
+
+</code></pre>
+
+  <hr />
+
+  <h1>✅ Conclusão</h1>
+  <ul>
+	<li>Verificamos se o Git estava instalado.</li>
+	<li>Instalamos o Git pelo site oficial.</li>
+	<li>Configuramos nome e email.</li>
+	<li>Criamos um repositório local.</li>
+	<li>Subimos o projeto para o GitHub.</li>
+	<li>Aprendemos sobre o <code>.gitignore</code> no contexto .NET Core.</li>
+	<li>Aprendemos a remover credenciais antigas no Windows.</li>
+  </ul>
+  <p>🔑 Resumindo para leigos:  
+  O Git é como um <strong>histórico escolar</strong> do seu projeto.  
+  Cada commit é uma nota salva no boletim.  
+  O GitHub é o <strong>cartório</strong> onde você registra oficialmente seu histórico e compartilha com o mundo.  
+  O <code>.gitignore</code> é como a regra que diz: “isso aqui não precisa ir para o cartório”.</p>
+
+  <footer>
+	✅ Agora você já sabe instalar, configurar, usar o Git do zero e gerenciar credenciais antigas.  
+	Pratique criando e subindo seus próprios repositórios!
+  </footer>
+
+</body>
+</html>
+
