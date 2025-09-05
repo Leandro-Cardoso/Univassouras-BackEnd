@@ -3,6 +3,15 @@ Estudo de Back End, com Python e Django.
 
 <br>
 
+## Aulas:
+
+<br>
+
+* [**Aula 02** - Ambiente de desenvolvimento e Django](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula02)
+* [**Aula 03** - Models, migrations, urls e templates](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula03)
+
+<br>
+
 ## Iniciando um novo projeto Django:
 
 <br>
