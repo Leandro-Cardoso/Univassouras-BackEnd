@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Python/Django - CRUD Read Detalhado</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+
+    h3 {
+      color: #555;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+
+    .highlight {
+      background: #fff4c2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+
+    .folder-structure {
+      background: #eef;
+      border-left: 4px solid #66f;
+      padding: 0.5rem 1rem;
+      margin: 1rem 0;
+      font-family: monospace;
+    }
+
+    .git {
+      background: #ffe;
+      border-left: 4px solid #fc3;
+      padding: 0.5rem 1rem;
+      margin: 1rem 0;
+      font-family: monospace;
+    }
+
+    .attention {
+      background: #fdd;
+      border-left: 4px solid #f44;
+      padding: 0.5rem 1rem;
+      margin: 1rem 0;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧪 Laboratório de Programação Backend</h1>
+<h2>📚 Universidade de Vassouras</h2>
+<h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+<h1>CRUD com Django – Listar Tarefas (Read)</h1>
+<p>
+Nesta aula vamos criar a listagem de tarefas do nosso CRUD.  
+Vou explicar cada passo detalhadamente, mostrando onde digitar o comando, o que ele faz e o resultado esperado.
+</p>
+
+<hr />
+
+<h2>1. Preparando o Ambiente</h2>
+<blockquote>Antes de programar, precisamos garantir que temos Python instalado, criar um ambiente virtual e instalar Django.</blockquote>
+
+<ul>
+  <li><strong>Abra o terminal</strong> (Prompt de Comando ou PowerShell no Windows, Terminal no Mac/Linux).</li>
+  <li>Crie uma pasta para seu projeto, por exemplo, na área de trabalho:
+    <pre><code class="language-bash">C:\Users\SeuNome\Desktop\MeusProjetos\crud_django</code></pre>
+  </li>
+  <li>Entre na pasta do projeto via Prompt de Comando (CMD):
+    <pre><code class="language-bash">cd C:\Users\SeuNome\Desktop\MeusProjetos\crud_django</code></pre>
+  </li>
+  <li>Caso já tenha o projeto criado no Git, clone-o:
+    <pre><code class="language-bash">git clone http://seu-projeto.git</code></pre>
+  </li>   
+  <li>Abra essa pasta no VSCode e crie o ambiente virtual dentro da pasta do projeto (Caso tenha clonado, apague a pasta .venv e recrie):
+    <pre><code class="language-bash">python -m venv .venv</code></pre>
+    <blockquote>Isso cria uma pasta <code>.venv</code> que vai conter todas as bibliotecas do projeto. Pense nela como uma caixinha isolada onde o Python guarda tudo que este projeto precisa.</blockquote>
+  </li>
+  <li>Ative o ambiente virtual:
+    <pre><code class="language-bash">.\.venv\Scripts\activate  # Usando o CMD. Evite usar PowerShell.
+source .venv/bin/activate   # Linux/Mac</code></pre>
+    <blockquote>Você verá (<code>.venv</code>) antes do prompt do terminal, indicando que o ambiente está ativo.</blockquote>
+  </li>
+  <li>Instale o Django:
+    <pre><code class="language-bash">pip install django</code></pre>
+  </li>
+</ul>
+
+<h2>2. Projeto vs App</h2>
+<blockquote>Pense no projeto como a <strong>casa inteira</strong> e cada app como um <strong>cômodo da casa</strong>.</blockquote>
+<ul>
+  <li><strong>Projeto:</strong> É a raiz da aplicação, contém as configurações globais, banco de dados, e define como tudo se conecta.</li>
+  <li><strong>App:</strong> Cada app é uma funcionalidade específica, como a cozinha ou o quarto da casa. Um app pode ter models, views e templates próprios.</li>
+  <li>No Django, você pode ter vários apps dentro de um mesmo projeto, e eles funcionam juntos, como cômodos que compartilham a mesma casa.</li>
+</ul>
+
+<h2>3. Padrão MTV</h2>
+<blockquote>Django segue o padrão <strong>MTV</strong> (Model, Template, View), que é parecido com o famoso MVC, mas com nomes diferentes.</blockquote>
+<ul>
+  <li><strong>Model:</strong> É a tabela do banco de dados. Ele sabe o que armazenar, mas não sabe como mostrar.</li>
+  <li><strong>Template:</strong> É o HTML que o usuário verá. Pensa nele como a <strong>roupa bonita</strong> que vestimos para apresentar os dados.</li>
+  <li><strong>View:</strong> É a ponte entre Model e Template. Ela pega os dados e manda para o template, como um garçom levando o prato da cozinha para a mesa.</li>
+</ul>
+
+<h2>4. Criando o Projeto Django</h2>
+<pre><code class="language-bash">
+# Execute na pasta do projeto
+django-admin startproject setup .
+python manage.py runserver
+</code></pre>
+<p>Acesse <code>http://127.0.0.1:8000/</code> no navegador. Você verá a página inicial do Django.</p>
+
+<h2>5. Criando o App "todos"</h2>
+<pre><code class="language-bash">
+# Execute na pasta do projeto
+python manage.py startapp todos
+</code></pre>
+<p>No arquivo <code>setup/settings.py</code>, adicione o app:</p>
+<pre><code class="language-python">
+INSTALLED_APPS = [
+    ...,
+    "todos",
+]
+</code></pre>
+
+<h2>6. Criando o Model</h2>
+<pre><code class="language-python">
+# 📂 Crie ou edite o arquivo: todos/models.py
+from django.db import models
+
+class Todo(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    is_completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+</code></pre>
+
+<h2>7. Rodando Migrations</h2>
+<pre><code class="language-bash">
+# Execute na pasta do projeto
+python manage.py makemigrations   
+python manage.py migrate          
+</code></pre>
+
+<h2>8. Criando a View de Listagem</h2>
+<pre><code class="language-python">
+# 📂 Crie ou edite o arquivo: todos/views.py
+from django.views.generic import ListView
+from .models import Todo
+
+class TodoListView(ListView):
+    model = Todo
+    template_name = "todos/todo_list.html"  # Local do template
+    context_object_name = "todos"           # Nome da lista no template
+</code></pre>
+
+<h2>9. Configurando URLs</h2>
+<pre><code class="language-python">
+# 📂 Crie o arquivo: todos/urls.py
+from django.urls import path
+from .views import TodoListView
+
+urlpatterns = [
+    path("", TodoListView.as_view(), name="todo_list"),
+]
+
+# 📂 Edite o arquivo: setup/urls.py
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", include("todos.urls")),  # Conecta as URLs do app
+]
+</code></pre>
+
+<h2>10. Estrutura de Pastas dos Templates</h2>
+<div class="folder-structure">
+todos/<br>
+├── templates/<br>
+│   └── todos/todo_list.html (Criar dentro da pasta todos, a pasta templates. Dentro da pasta templates, outra pasta todos e então o arquivo html)<br>
+│           <br>
+</div>
+<blockquote>O template **deve ficar dentro de `todos/templates/todos/`**.</blockquote>
+
+<h2>11. Criando o Template</h2>
+<pre><code class="language-html">
+<!-- 📂 Crie o arquivo: todos/templates/todos/todo_list.html -->
+&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-br"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Lista de Tarefas&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Lista de Tarefas&lt;/h1&gt;
+  &lt;ul&gt;
+    {% for todo in todos %}
+      &lt;li&gt;&lt;strong&gt;{{ todo.title }}&lt;/strong&gt; - {{ todo.description }}
+    {% empty %}
+      &lt;li&gt;Nenhuma tarefa cadastrada&lt;/li&gt;
+    {% endfor %}
+  &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h2>12. Testando no Navegador</h2>
+<pre><code class="language-bash">
+# Execute na pasta do projeto
+python manage.py runserver
+# Abra http://127.0.0.1:8000/ no navegador
+</code></pre>
+<p>Você verá a lista de tarefas ou a mensagem "Nenhuma tarefa cadastrada".</p>
+
+<h2>13. Salvando no Git</h2>
+<div class="git">
+git init<br>
+git add .<br>
+git commit -m "feat(TodoRead): Criada listagem de tarefas com ListView e template"
+</div>
+
+<footer>
+✅ Parabéns! Agora você tem a **listagem de tarefas funcionando** em Django, com explicações detalhadas sobre **projeto vs app** e o padrão **MTV**.  
+Pratique adicionando tarefas no admin e veja como a lista se atualiza automaticamente!
+</footer>
+
+</body>
+</html>
