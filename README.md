@@ -9,6 +9,8 @@ Estudo de Back End, com Python e Django.
 
 * [**Aula 02** - Ambiente de desenvolvimento e Django](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula02)
 * [**Aula 03** - Models, migrations, urls e templates](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula03)
+* [**Aula 04** - View e create](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula04)
+* [**Aula 05** - Revisão](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula05)
 
 <br>
 
@@ -40,6 +42,21 @@ pip install django
 * Criar projeto Django:
 ```[cmd]
 django-admin startproject setup .
+```
+
+<br>
+
+* Criar app:
+```[cmd]
+python manage.py startapp NOME_DO_APP
+```
+
+<br>
+
+* Fazer migrações:
+```[cmd]
+python manage.py makemigrations
+python manage.py migrate
 ```
 
 <br>
