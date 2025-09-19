@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Laboratório de Programação Back End</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+
+    h3 {
+      color: #555;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+
+    .highlight {
+      background: #fff4c2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Laboratório de Programação Back End</h1>
+  <h2>📚 Universidade de Vassouras</h2>
+  <h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+  <h1>CRUD com Django – Criar Tarefas (Create)</h1>
+  <p>
+    Nesta aula vamos revisar <span class="highlight">Git</span>, <span class="highlight">Python</span> e começar a criar 
+    um cadastro simples com <span class="highlight">Django</span>.
+  </p>
+
+  <h2>Revisando sobre Python</h2>
+  <ul>
+    <li>Linguagem interpretada, fácil e poderosa.</li>
+    <li>Usada em desenvolvimento web, ciência de dados, automação, etc.</li>
+    <li>Ambientes isolados (<code>venv</code>) ajudam a gerenciar dependências.</li>
+  </ul>
+
+  <h3>Exemplo: criar ambiente virtual</h3>
+  <pre><code class="language-bash">
+python -m venv .venv
+  </code></pre>
+
+  <blockquote>💡 Linguagens interpretadas funcionam como um <strong>chef que lê a receita linha a linha</strong>, enquanto compiladas (C#, Java) transformam toda a receita em instruções antes de executar.</blockquote>
+
+  <ul>
+    <li><strong>Interpretadas</strong>: Python, JavaScript, Ruby, PHP.</li>
+    <li><strong>Compiladas</strong>: C#, Java.</li>
+  </ul>
+
+  <h3>Tipos de dados em Python</h3>
+  <ul>
+    <li><strong>int</strong>: números inteiros</li>
+    <li><strong>float</strong>: números decimais</li>
+    <li><strong>string</strong>: textos</li>
+    <li><strong>bool</strong>: verdadeiro ou falso</li>
+  </ul>
+
+  <pre><code class="language-python">
+idade = 20
+nome = "Rodrigo"
+preco = 9.99
+disponivel = True
+  </code></pre>
+
+  <h3>Condicionais e Loops</h3>
+  <pre><code class="language-python">
+if idade >= 18:
+    print("Maior de idade")
+else:
+    print("Menor de idade")
+
+for i in range(5):
+    print(i)
+  </code></pre>
+
+  <h3>Funções e Classes</h3>
+  <pre><code class="language-python">
+def saudacao(nome):
+    return f"Olá, {nome}!"
+
+class Pessoa:
+    def __init__(self, nome, idade):
+        self.nome = nome
+        self.idade = idade
+
+    def apresentar(self):
+        print(f"Meu nome é {self.nome} e tenho {self.idade} anos.")
+  </code></pre>
+
+  <hr />
+
+  <h2>Revisando sobre Django</h2>
+  <blockquote>Django é um framework web de alto nível em Python que segue a arquitetura <strong>MTV (Model-Template-View)</strong>.</blockquote>
+
+  <ul>
+    <li><strong>Model</strong>: estrutura de dados e interação com o banco.</li>
+    <li><strong>View</strong>: lógica de negócio e resposta HTTP.</li>
+    <li><strong>Template</strong>: apresentação dos dados.</li>
+  </ul>
+
+  <h3>Exemplo simples de View com Django</h3>
+  <pre><code class="language-python">
+from django.views.generic import ListView
+from .models import Todo
+
+class TodoListView(ListView):
+    model = Todo
+  </code></pre>
+
+  <h3>URLs</h3>
+  <pre><code class="language-python">
+from django.urls import path
+from todos.views import TodoListView
+
+urlpatterns = [
+    path("", TodoListView.as_view())
+]
+  </code></pre>
+
+  <hr />
+
+  <h2>Criando uma página de cadastro (CreateView)</h2>
+  <h3>views.py</h3>
+  <pre><code class="language-python">
+from django.views.generic import ListView, CreateView
+from django.urls import reverse_lazy
+from .models import Todo
+
+class TodoListView(ListView):
+    model = Todo
+    template_name = "todos/todo_list.html"  
+    context_object_name = "todos"           
+        
+class TodoCreateView(CreateView):
+    model = Todo
+    fields = ["title", "description"]
+    success_url = reverse_lazy("todo_list")
+  </code></pre>
+
+  <h3>Na pasta todos, vá em urls.py</h3>
+  <pre><code class="language-python">
+from django.urls import path
+from todos.views import TodoListView, TodoCreateView
+
+urlpatterns = [
+    path("", TodoListView.as_view(), name="todo_list"),
+    path("create", TodoCreateView.as_view(), name="todo_create")
+]
+  </code></pre>
+
+  <h3>Crie o arquivo todo_form.html na pasta todos/templates/todos</h3>
+<pre><code class="language-html">
+&lt;h1&gt;Nova Tarefa&lt;/h1&gt;
+&lt;form method="POST"&gt;
+  {% csrf_token %}
+  {{ form }}
+  &lt;button type="submit"&gt;Salvar&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;a href="{% url 'todo_list' %}"&gt;Voltar&lt;/a&gt;
+</code></pre>
+  <h3>Navegação entre páginas</h3>
+  <ul>
+    <li>Volte no arquivo <code>todo_list.html</code> e inclua: <code>&lt;a href="{% url 'todo_create' %}"&gt;Nova Tarefa&lt;/a&gt;</code> antes de fechar a tag html</li>
+    <li>Em <code>todo_form.html</code>: botão de voltar para lista.</li>
+  </ul>
+  
+  <h2>🔹 Git - Passos para Comitar</h2>
+  <blockquote>Manter o código versionado ajuda a rastrear mudanças e voltar atrás se necessário.</blockquote>
+  <pre><code class="language-bash">
+git init                    # Inicializar repositório (se ainda não existir)
+git add .                    # Adicionar todos os arquivos
+git commit -m "Primeiro commit do CRUD Django"  # Criar commit com mensagem
+git status                   # Verificar status e mudanças pendentes
+git log                      # Ver histórico de commits
+git push                      # Código no repositório remoto
+  </code></pre>
+
+  <footer>
+    ✅ Revisamos Git, Python e Django.  
+    ✅ Criamos nossa primeira página de cadastro com <strong>Django CreateView</strong>.  
+    💡 Lembre-se sempre: após terminar sua aula ou exercício, <strong>faça commit e push no seu repositório!</strong>
+  </footer>
+</body>
+</html>
