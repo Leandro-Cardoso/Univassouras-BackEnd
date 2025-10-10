@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Python/Django - CRUD Update Detalhado</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+
+    h3 {
+      color: #555;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      white-space: pre;
+    }
+
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+
+    .highlight {
+      background: #fff4c2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+
+    .attention {
+      background: #fdd;
+      border-left: 4px solid #f44;
+      padding: 0.5rem 1rem;
+      margin: 1rem 0;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Laboratório de Programação Fullstack</h1>
+  <h2>📚 Universidade de Vassouras</h2>
+  <h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+  <h1>Editando Registros com <span class="highlight">UpdateView</span></h1>
+
+  <p>
+    Até agora já aprendemos a <strong>listar</strong> e <strong>adicionar</strong> tarefas.  
+    Hoje vamos avançar para a funcionalidade de <span class="highlight">editar</span> registros no nosso CRUD com Django.
+  </p>
+
+  <hr />
+
+  <h2>0. Abrindo o VSCode e clonando o projeto</h2>
+  <ul>
+    <li>Abra o <strong>VSCode</strong>.</li>
+    <li>Se você já tem o repositório no GitHub, abra o terminal do VSCode e digite:
+      <pre><code class="language-bash">git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio</code></pre>
+      <blockquote>Isso copia o projeto para sua máquina e entra na pasta do projeto.</blockquote>
+    </li>
+    <li>Se não tiver repositório, apenas abra a pasta do projeto pelo VSCode.</li>
+    <li>Certifique-se de ativar o ambiente virtual:
+      <pre><code class="language-bash">.\.venv\Scripts\activate  # Windows
+source .venv/bin/activate    # Linux/Mac</code></pre>
+    </li>
+  </ul>
+
+  <hr />
+
+  <h2>1. O que é uma UpdateView?</h2>
+  <blockquote>
+    A <strong>UpdateView</strong> é uma <em>class-based view</em> do Django que permite criar rapidamente uma página de edição de objetos já cadastrados.
+  </blockquote>
+
+  <p>Ela funciona em conjunto com a <span class="highlight">pk</span> (chave primária) para identificar qual objeto será atualizado.</p>
+  <p>
+    🔹 Imagine que cada tarefa é uma ficha com número de registro. O <strong>pk</strong> é esse número que diz: “Essa é a ficha que quero alterar”.
+  </p>
+
+  <hr />
+
+  <h2>2. Criando a View de Edição</h2>
+  <p>No arquivo <code>todos/views.py</code> adicionamos a <code>UpdateView</code>:</p>
+
+  <pre><code class="language-python">
+from django.views.generic import ListView, CreateView, UpdateView
+from django.urls import reverse_lazy
+from .models import Todo
+
+class TodoListView(ListView):
+    model = Todo
+    template_name = "todos/todo_list.html"  
+    context_object_name = "todos"            
+
+class TodoCreateView(CreateView):
+    model = Todo
+    fields = ["title", "description"]
+    success_url = reverse_lazy("todo_list")
+
+class TodoUpdateView(UpdateView):
+    model = Todo
+    fields = ["title", "description"]
+    success_url = reverse_lazy("todo_list")
+  </code></pre>
+
+  <p>
+    🔎 <strong>Explicando:</strong><br>
+    - <code>model = Todo</code> → indica a tabela usada.<br>
+    - <code>fields</code> → define os campos que serão exibidos para edição.<br>
+    - <code>template_name</code> → reaproveitamos o mesmo formulário usado para criar.<br>
+    - <code>success_url</code> → define para onde o usuário será redirecionado após salvar.
+  </p>
+
+  <hr />
+
+  <h2>3. Ajustando URLs</h2>
+  <p>No arquivo <code>todos/urls.py</code>, adicione a rota de edição:</p>
+
+  <pre><code class="language-python">
+from django.urls import path
+from todos.views import TodoListView, TodoCreateView, TodoUpdateView
+
+urlpatterns = [
+    path("", TodoListView.as_view(), name="todo_list"),
+    path("create/", TodoCreateView.as_view(), name="todo_create"),
+    path("editar/&lt;int:pk&gt/", TodoUpdateView.as_view(), name="todo_update"), 
+]
+  </code></pre>
+
+  <blockquote>
+    🔹 O parâmetro <strong>pk</strong> é essencial para que o Django saiba qual tarefa editar.  
+    Ele pega automaticamente a <strong>chave primária</strong> do objeto no banco.
+  </blockquote>
+
+  <hr />
+
+  <h2>4. Template de Edição</h2>
+  <p>Podemos usar o mesmo <code>todo_form.html</code> que já criamos.  
+  O Django diferencia automaticamente se é <span class="highlight">criação</span> ou <span class="highlight">edição</span> dependendo da view.</p>
+
+  <hr />
+
+  <h2>5. Listagem com Link de Edição</h2>
+  <p>Agora precisamos exibir a lista de tarefas com o link para edição usando o <span class="highlight">id</span>:</p>
+
+  <pre><code class="language-html">
+&lt;h1&gt;Listar Tarefas&lt;/h1&gt;
+&lt;ul&gt;
+{% for todo in todos %}
+  &lt;li&gt;{{ todo.title }} - {{ todo.description }} - &lt;a href="{% url 'todo_update' todo.pk %}"&gt;Editar&lt;/a&gt;&lt;/li&gt;
+{% empty %}
+  &lt;li&gt;Nenhuma tarefa cadastrada&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+&lt;a href="{% url 'todo_create' %}"&gt;Nova tarefa&lt;/a&gt;
+  </code></pre>
+
+  <hr />
+
+  <h2>7. Testando</h2>
+  <ol>
+    <li>Execute o servidor: <code>python manage.py runserver</code></li>
+    <li>Acesse <code>http://127.0.0.1:8000/editar/1/</code> (substitua 1 pelo ID de alguma tarefa)</li>
+    <li>Altere os dados e clique em <strong>Salvar Alterações</strong></li>
+    <li>Exercício: Consegue tratar o erro se o id não existir?</li>
+  </ol>
+
+  <hr />
+
+  <h2>8. 🚀 Dicas Extras</h2>
+  <ul>
+    <li>Você pode criar um botão “Editar” na listagem para facilitar.</li>
+    <li>Com poucas linhas, já temos um CRUD quase completo (faltando apenas deletar).</li>
+    <li>Não esqueça de fazer <code>git add .</code> e <code>git commit -m "feat: implementada edição de tarefas"</code>.</li>
+  </ul>
+
+  <footer>
+    ✅ Agora já conseguimos <strong>editar tarefas</strong> com Django!  
+    Na próxima aula, aprenderemos como <strong>deletar</strong> registros.
+  </footer>
+
+</body>
+</html>

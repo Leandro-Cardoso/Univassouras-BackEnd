@@ -14,6 +14,14 @@ Estudo de Back End, com Python e Django.
 
 <br>
 
+* [**P1**](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/p1)
+
+<br>
+
+* [**Aula 06** - Update e revisão](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula06)
+
+<br>
+
 ## Iniciando um novo projeto Django:
 
 <br>
