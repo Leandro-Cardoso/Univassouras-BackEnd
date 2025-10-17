@@ -19,6 +19,7 @@ Estudo de Back End, com Python e Django.
 <br>
 
 * [**Aula 06** - Update e revisão](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula06)
+* [**Aula 07** - Delete e o Programador Pragmatico](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/aula07)
 
 <br>
 

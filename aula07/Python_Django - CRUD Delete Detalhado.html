@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Python/Django - CRUD Delete Detalhado</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+
+    h3 {
+      color: #555;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      white-space: pre;
+    }
+
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+
+    .highlight {
+      background: #fff4c2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Laboratório de Programação Fullstack</h1>
+  <h2>📚 Universidade de Vassouras</h2>
+  <h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+  <h1>Deletando Registros com <span class="highlight">DeleteView</span></h1>
+
+  <p>
+    Agora que já aprendemos a <strong>listar</strong>, <strong>adicionar</strong> e <strong>editar</strong> tarefas,  
+    vamos implementar a funcionalidade de <span class="highlight">deletar</span> registros no nosso CRUD com Django.
+  </p>
+
+  <hr />
+
+  <h2>1. O que é uma DeleteView?</h2>
+  <blockquote>
+    A <strong>DeleteView</strong> é uma <em>class-based view</em> do Django que permite criar rapidamente uma página de confirmação de exclusão de objetos.
+  </blockquote>
+
+  <p>Ela também usa a <span class="highlight">pk</span> (chave primária) para identificar qual objeto será deletado.</p>
+  <p>
+    🔹 Pense na <strong>DeleteView</strong> como um botão vermelho de alerta: “Você tem certeza que quer apagar essa ficha?”.
+  </p>
+
+  <hr />
+
+  <h2>2. Criando a View de Deleção</h2>
+  <p>No arquivo <code>todos/views.py</code> adicionamos a <code>DeleteView</code>:</p>
+
+  <pre><code class="language-python">
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Todo
+
+class TodoListView(ListView):
+    model = Todo
+    template_name = "todos/todo_list.html"  
+    context_object_name = "todos"           
+        
+class TodoCreateView(CreateView):
+    model = Todo
+    fields = ["title", "description"]
+    success_url = reverse_lazy("todo_list")
+    
+class TodoUpdateView(UpdateView):
+    model = Todo
+    fields = ["title", "description"]
+    success_url = reverse_lazy("todo_list")
+
+class TodoDeleteView(DeleteView):
+    model = Todo
+    success_url = reverse_lazy("todo_list")
+  </code></pre>
+
+  <p>
+    🔎 <strong>Explicando:</strong><br>
+    - <code>model = Todo</code> → indica a tabela usada.<br>
+    - <code>template_name</code> → criaremos uma página de confirmação de exclusão.<br>
+    - <code>success_url</code> → define para onde o usuário será redirecionado após deletar.
+  </p>
+
+  <hr />
+
+  <h2>3. Ajustando URLs</h2>
+  <p>No arquivo <code>todos/urls.py</code>, adicione a rota de deleção:</p>
+
+  <pre><code class="language-python">
+from django.urls import path
+from todos.views import TodoListView, TodoCreateView, TodoUpdateView, TodoDeleteView
+
+urlpatterns = [
+    path("", TodoListView.as_view(), name="todo_list"),
+    path("create/", TodoCreateView.as_view(), name="todo_create"),
+    path("editar/&lt;int:pk&gt/", TodoUpdateView.as_view(), name="todo_update"),
+    path("delete/&lt;int:pk&gt/", TodoDeleteView.as_view(), name="todo_delete"),  # rota de deleção
+]
+  </code></pre>
+
+  <blockquote>
+    🔹 O parâmetro <strong>pk</strong> é essencial para que o Django saiba qual tarefa deletar.
+  </blockquote>
+
+  <hr />
+
+  <h2>4. Template de Confirmação</h2>
+  <p>Crie o arquivo <code>todo_confirm_delete.html</code> em todos/templates/todos com o seguinte conteúdo:</p>
+
+  <pre><code class="language-html">
+&lt;h1&gt;Confirmação de Exclusão&lt;/h1&gt;
+&lt;p&gt;Você tem certeza que deseja deletar a tarefa: &lt;strong&gt;{{ object.title }}&lt;/strong&gt;?&lt;/p&gt;
+
+&lt;form method="post"&gt;
+  {% csrf_token %}
+  &lt;button type="submit"&gt;Sim, deletar&lt;/button&gt;
+  &lt;a href="{% url 'todo_list' %}"&gt;Cancelar&lt;/a&gt;
+&lt;/form&gt;
+  </code></pre>
+
+  <hr />
+
+  <h2>5. Listagem com Link de Deleção</h2>
+  <p>Atualize a listagem para incluir o link de deleção:</p>
+
+  <pre><code class="language-html">
+&lt;h1&gt;Listar Tarefas&lt;/h1&gt;
+&lt;ul&gt;
+{% for todo in todos %}
+  &lt;li&gt;
+    {{ todo.title }} - {{ todo.description }}
+    - &lt;a href="{% url 'todo_update' todo.pk %}"&gt;Editar&lt;/a&gt;
+    - &lt;a href="{% url 'todo_delete' todo.pk %}"&gt;Deletar&lt;/a&gt;
+  &lt;/li&gt;
+{% empty %}
+  &lt;li&gt;Nenhuma tarefa cadastrada&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+&lt;a href="{% url 'todo_create' %}"&gt;Nova tarefa&lt;/a&gt;
+  </code></pre>
+
+  <hr />
+
+  <h2>6. Testando</h2>
+  <ol>
+    <li>Execute o servidor: <code>python manage.py runserver</code></li>
+    <li>Acesse <code>http://127.0.0.1:8000/</code> e veja a lista de tarefas</li>
+    <li>Clique em <strong>Deletar</strong> em alguma tarefa</li>
+    <li>Na página de confirmação, clique em <strong>Sim, deletar</strong></li>
+    <li>Verifique que a tarefa foi removida da lista</li>
+  </ol>
+
+  <hr />
+
+  <h2>7. 🚀 Dicas Extras</h2>
+  <ul>
+    <li>DeleteView já cria automaticamente a confirmação de exclusão.</li>
+    <li>Sempre faça backups antes de deletar dados importantes! ⚠️</li>
+    <li>Não esqueça de fazer <code>git add .</code> e <code>git commit -m "feat: implementada deleção de tarefas"</code>.</li>
+  </ul>
+
+  <footer>
+    ✅ Agora já conseguimos <strong>deletar tarefas</strong> com Django!  
+    Parabéns, seu CRUD agora está completo.
+  </footer>
+
+</body>
+</html>
+

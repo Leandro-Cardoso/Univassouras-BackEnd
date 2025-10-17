@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aula – Resumo: O Programador Pragmático</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+    h3 {
+      color: #555;
+    }
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      white-space: pre;
+    }
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+    .highlight {
+      background: #fff4c2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .bad {
+      background: #ffd2d2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #900;
+    }
+    .good {
+      background: #d2ffd2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #090;
+    }
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Laboratório de Programação Fullstack</h1>
+  <h2>📚 Universidade de Vassouras</h2>
+  <h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+  <h1>📖 Resumo do Livro: O Programador Pragmático</h1>
+  <p>O livro <span class="highlight">“O Programador Pragmático”</span> (Andrew Hunt e David Thomas) é uma das obras mais importantes da área de desenvolvimento de software.  
+  Ele não ensina uma linguagem específica — ele ensina <strong>como pensar e agir como um profissional de software</strong>.  
+  Seus princípios continuam extremamente atuais, mesmo décadas após a primeira publicação.</p>
+
+  <blockquote>
+    💡 Ler e aplicar os princípios desse livro é um divisor de águas na carreira de qualquer programador.  
+    Ele transforma alguém que “só escreve código” em um verdadeiro engenheiro de software.
+  </blockquote>
+
+  <hr>
+
+  <h2>1. Seja Responsável pelo Seu Código</h2>
+  <p>Um programador pragmático não joga a culpa no framework, no colega ou no prazo. Ele assume responsabilidade.</p>
+
+  <ul>
+    <li>Se algo está errado → investiga, entende e corrige.</li>
+    <li>Evita frases como “no meu computador funciona”.</li>
+    <li>Age com profissionalismo em cada entrega.</li>
+  </ul>
+
+  <pre><code class="language-csharp">
+// Exemplo ruim
+try
+{
+    Processar();
+}
+catch
+{
+    // Ignorando erro silenciosamente 😬
+}
+
+// Exemplo bom
+try
+{
+    Processar();
+}
+catch (Exception ex)
+{
+    Log.Error(ex); // registra o erro
+    throw; // ou trata de forma adequada
+}
+  </code></pre>
+
+  <p class="bad">Ignorar erros é fácil, mas perigoso.</p>
+  <p class="good">Registrar e tratar erros mostra responsabilidade e profissionalismo.</p>
+
+  <hr>
+
+  <h2>2. Pense Criticamente</h2>
+  <p>Não aceite nada “de olhos fechados”. Entenda o porquê de cada decisão técnica. Questione com respeito.</p>
+
+  <ul>
+    <li>Se alguém sugerir uma arquitetura → pergunte por que.</li>
+    <li>Se um bug aparece → investigue, não chute.</li>
+    <li>Evite “receitas de bolo” sem compreender.</li>
+  </ul>
+
+  <blockquote>
+    🧠 Um programador pragmático pensa, reflete, testa e entende.
+  </blockquote>
+
+  <hr>
+
+  <h2>3. Evite Repetição – DRY (Don't Repeat Yourself)</h2>
+  <p>Um dos princípios mais importantes: <span class="highlight">cada pedaço de conhecimento deve ter uma representação única e não ambígua</span>.</p>
+
+  <pre><code class="language-csharp">
+// Exemplo ruim: lógica repetida
+if (valor > 1000)
+{
+    Console.WriteLine("Desconto de 10%");
+}
+
+...
+
+if (valor > 1000)
+{
+    Console.WriteLine("Desconto de 10%");
+}
+  </code></pre>
+
+  <pre><code class="language-csharp">
+// Exemplo bom: lógica centralizada
+void AplicarDesconto(decimal valor)
+{
+    if (valor > 1000)
+    {
+        Console.WriteLine("Desconto de 10%");
+    }
+}
+  </code></pre>
+
+  <p>Evitar repetição torna o sistema mais consistente, mais fácil de manter e menos propenso a bugs.</p>
+
+  <hr>
+
+  <h2>4. Quebre o Acoplamento</h2>
+  <p>O livro enfatiza que sistemas bem projetados têm partes com responsabilidades claras e baixo acoplamento.</p>
+
+  <pre><code class="language-csharp">
+// Exemplo ruim: lógica de banco misturada com lógica de negócio
+public void SalvarPedido(Pedido pedido)
+{
+    // Validação
+    if (pedido.Itens.Count == 0)
+        throw new Exception("Pedido vazio");
+
+    // Banco de dados
+    using(var conn = new SqlConnection(...))
+    {
+        // ...
+    }
+}
+  </code></pre>
+
+  <pre><code class="language-csharp">
+// Exemplo bom: separação clara
+public class PedidoService
+{
+    private readonly IPedidoRepository _repo;
+    public PedidoService(IPedidoRepository repo) => _repo = repo;
+
+    public void Salvar(Pedido pedido)
+    {
+        if (pedido.Itens.Count == 0)
+            throw new Exception("Pedido vazio");
+
+        _repo.Salvar(pedido);
+    }
+}
+  </code></pre>
+
+  <blockquote>
+    ✨ Separar responsabilidades → código mais limpo, testável e flexível.
+  </blockquote>
+
+  <hr>
+
+  <h2>5. Trace um Plano de Carreira</h2>
+  <p>O livro lembra que você deve estar <strong>sempre aprendendo</strong> e se atualizando. Não dependa de empresa, faculdade ou sorte.</p>
+
+  <ul>
+    <li>Aprenda constantemente novas linguagens, paradigmas e ferramentas.</li>
+    <li>Construa sua própria caixa de ferramentas.</li>
+    <li>Leia, pratique, ensine e compartilhe.</li>
+  </ul>
+
+  <blockquote>
+    🚀 Seu crescimento como profissional depende de você. Seja intencional.
+  </blockquote>
+
+  <hr>
+
+  <h2>6. Ferramentas Afiadas 🧰</h2>
+  <p>Um programador pragmático conhece bem suas ferramentas: editor, terminal, versionamento, automações, testes, debugger…</p>
+
+  <ul>
+    <li>Use atalhos e extensões para acelerar sua produtividade.</li>
+    <li>Domine Git e terminal.</li>
+    <li>Configure seu ambiente de desenvolvimento com carinho.</li>
+  </ul>
+
+  <blockquote>
+    ✂️ Um bom profissional não “luta contra as ferramentas” — ele as domina.
+  </blockquote>
+
+  <hr>
+
+  <h2>7. Comunicação Importa 🗣️</h2>
+  <p>O livro reforça que programar não é só escrever código — é saber explicar ideias, propor soluções e documentar bem.</p>
+
+  <ul>
+    <li>Explique suas decisões com clareza para o time.</li>
+    <li>Nomeie variáveis e métodos de forma expressiva.</li>
+    <li>Escreva commits claros e mensagens objetivas.</li>
+  </ul>
+
+  <blockquote>
+    💬 Comunicação clara evita ruídos, retrabalhos e aumenta a confiança no time.
+  </blockquote>
+
+  <hr>
+
+  <h2>8. Importância do Livro</h2>
+  <ul>
+    <li>Forma uma mentalidade profissional e madura.</li>
+    <li>Desenvolve pensamento crítico e autonomia.</li>
+    <li>É atemporal — princípios aplicáveis em qualquer linguagem ou era.</li>
+    <li>É leitura obrigatória para quem quer se destacar na área.</li>
+  </ul>
+
+  <blockquote>
+    📚 Ler esse livro é um dos melhores investimentos que um desenvolvedor pode fazer.
+  </blockquote>
+
+  <hr>
+
+  <h2>9. Conclusão</h2>
+  <ul>
+    <li>Assuma responsabilidade.</li>
+    <li>Pense criticamente.</li>
+    <li>Evite repetição (DRY).</li>
+    <li>Desacople responsabilidades.</li>
+    <li>Aprenda continuamente.</li>
+    <li>Domine suas ferramentas.</li>
+    <li>Comunique-se com clareza.</li>
+  </ul>
+
+  <footer>
+    ✅ Aula resumo do livro <strong>O Programador Pragmático</strong> — um guia atemporal para desenvolvedores profissionais.  
+    Próximo passo: aplicar esses princípios no seu código e nas suas atitudes diárias 👨‍💻✨
+  </footer>
+
+</body>
+</html>
+
+
