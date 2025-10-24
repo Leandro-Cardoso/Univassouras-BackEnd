@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Python/Django - Completar Tarefa Detalhado</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+
+    h3 {
+      color: #555;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      white-space: pre;
+    }
+
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+
+    .highlight {
+      background: #fff4c2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Laboratório de Programação Backend</h1>
+  <h2>📚 Universidade de Vassouras</h2>
+  <h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+  <h1>Completando Tarefas com <span class="highlight">Class-Based View</span></h1>
+
+  <p>
+    Agora que já aprendemos a <strong>listar</strong>, <strong>adicionar</strong>, <strong>editar</strong> e <strong>deletar</strong> tarefas,  
+    vamos implementar a funcionalidade de <span class="highlight">marcar uma tarefa como concluída</span> no nosso CRUD com Django.
+  </p>
+
+  <hr />
+
+  <h2>1. Criando a View de Conclusão</h2>
+  <p>No arquivo <code>todos/views.py</code> adicionamos a classe <code>TodoCompletarView</code>:</p>
+
+  <pre><code class="language-python">
+from django.views import View  # Base para criar views genéricas
+from django.shortcuts import redirect, get_object_or_404  # Para buscar objetos e redirecionar
+from .models import Todo
+
+class TodoCompletarView(View):
+    """
+    Classe que marca uma tarefa como concluída.
+    """
+
+    def post(self, request, pk):
+        # Busca a tarefa pelo id ou retorna 404 se não existir
+        todo = get_object_or_404(Todo, pk=pk)
+        # Marca como concluída
+        todo.completed = True
+        # Salva a alteração no banco
+        todo.save()
+        # Redireciona de volta para a lista de tarefas
+        return redirect("todo_list")
+  </code></pre>
+
+  <p>
+    🔎 <strong>Explicando linha a linha:</strong><br>
+    - <code>View</code> → base para qualquer classe de view no Django.<br>
+    - <code>def post(self, request, pk)</code> → usamos POST para alterar dados, seguindo boas práticas de HTTP.<br>
+    - <code>get_object_or_404(Todo, pk=pk)</code> → busca a tarefa pelo id ou retorna 404.<br>
+    - <code>todo.completed = True</code> → marca a tarefa como concluída.<br>
+    - <code>todo.save()</code> → salva a alteração no banco.<br>
+    - <code>redirect("todo_list")</code> → volta para a lista de tarefas.
+  </p>
+
+  <hr />
+
+  <h2>2. Ajustando URLs</h2>
+  <p>No arquivo <code>todos/urls.py</code>, adicione a rota de conclusão:</p>
+
+  <pre><code class="language-python">
+from todos.views import (
+    TodoListView,
+    TodoCreateView,
+    TodoUpdateView,
+    TodoDeleteView,
+    TodoCompletarView
+)
+
+urlpatterns = [
+    path("", TodoListView.as_view(), name="todo_list"),
+    path("create/", TodoCreateView.as_view(), name="todo_create"),
+    path("editar/&lt;int:pk&gt/", TodoUpdateView.as_view(), name="todo_update"),
+    path("delete/&lt;int:pk&gt/", TodoDeleteView.as_view(), name="todo_delete"),
+    path("completar/&lt;int:pk&gt/", TodoCompletarView.as_view(), name="todo_completar"),  # rota de conclusão
+]
+  </code></pre>
+
+  <hr />
+
+  <h2>3. Atualizando o Template de Listagem</h2>
+  <p>Adicione um formulário POST para marcar a tarefa como concluída:</p>
+
+  <pre><code class="language-html">
+&lt;h1&gt;Listar Tarefas&lt;/h1&gt;
+&lt;ul&gt;
+{% for todo in todos %}
+  &lt;li&gt;
+    {{ todo.title }} - {{ todo.description }}
+    {% if not todo.completed %}
+      &lt;form action="{% url 'todo_completar' todo.pk %}" method="post" style="display:inline;"&gt;
+        {% csrf_token %}
+        &lt;button type="submit"&gt;Marcar como concluída&lt;/button&gt;
+      &lt;/form&gt;
+    {% else %}
+      &lt;span&gt;✔ Concluída&lt;/span&gt;
+    {% endif %}
+    - &lt;a href="{% url 'todo_update' todo.pk %}"&gt;Editar&lt;/a&gt;
+    - &lt;a href="{% url 'todo_delete' todo.pk %}"&gt;Deletar&lt;/a&gt;
+  &lt;/li&gt;
+{% empty %}
+  &lt;li&gt;Nenhuma tarefa cadastrada&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+&lt;a href="{% url 'todo_create' %}"&gt;Nova tarefa&lt;/a&gt;
+  </code></pre>
+
+  <hr />
+
+  <h2>4. Testando</h2>
+  <ol>
+    <li>Execute o servidor: <code>python manage.py runserver</code></li>
+    <li>Acesse <code>http://127.0.0.1:8000/</code> e veja a lista de tarefas</li>
+    <li>Clique em <strong>Marcar como concluída</strong> em alguma tarefa pendente</li>
+    <li>Verifique que a tarefa aparece como <strong>✔ Concluída</strong> e o botão some</li>
+    <li>Teste também editar e deletar para confirmar que tudo funciona junto</li>
+  </ol>
+
+  <hr />
+
+  <h2>5. 🚀 Dicas Extras</h2>
+  <ul>
+    <li>Usar Class-Based Views mantém o padrão com o restante do CRUD.</li>
+    <li>Formulário POST evita alterações indevidas via GET.</li>
+    <li>Você pode adicionar mensagens de sucesso usando <code>django.contrib.messages</code>.</li>
+    <li>Não esqueça de fazer <code>git add .</code> e <code>git commit -m "feat: tarefa completada com CBV"</code>.</li>
+  </ul>
+
+  <footer>
+    ✅ Agora já conseguimos <strong>marcar tarefas como concluídas</strong> com Django!  
+    Nosso CRUD está completo e funcional.
+  </footer>
+
+</body>
+</html>
+
+

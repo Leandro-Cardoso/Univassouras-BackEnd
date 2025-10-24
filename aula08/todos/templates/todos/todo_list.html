@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos</title>
+</head>
+<body>
+    
+    <h1>Listar Tarefas</h1>
+
+    <ul>
+        {% for todo in todos %}
+
+        <li>
+            {{ todo.title }} - {{ todo.description }}
+
+            {% if not todo.is_completed %}
+            <form action="{% url 'todo_completar' todo.pk %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Marcar como concluída</button>
+            </form>
+            {% else %}
+            <span>✔ Concluída</span>
+            {% endif %}
+            - <a href="{% url 'todo_update' todo.pk %}">Editar</a>
+            - <a href="{% url 'todo_delete' todo.pk %}">Deletar</a>
+        </li>
+
+        {% empty %}
+
+        <li>Nenhuma tarefa cadastrada</li>
+
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'todo_create' %}">Nova tarefa</a>
+
+</body>
+</html>
