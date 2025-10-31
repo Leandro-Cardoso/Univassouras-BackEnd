@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aula – Revisão de Orientação a Objetos em C#</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+    h3 {
+      color: #555;
+    }
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+      white-space: pre;
+    }
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+    .highlight {
+      background: #fff4c2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .bad {
+      background: #ffd2d2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #900;
+    }
+    .good {
+      background: #d2ffd2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      color: #090;
+    }
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧪 Laboratório de Programação Fullstack</h1>
+  <h2>📚 Universidade de Vassouras</h2>
+  <h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+  <h1>Revisão Geral de Orientação a Objetos em C#</h1>
+  <p>Nesta aula vamos revisar os principais conceitos de <span class="highlight">Programação Orientada a Objetos (POO)</span> em C#, indo do básico ao avançado. Vamos ver exemplos reais e explicar **linha por linha** para consolidar os conceitos.</p>
+
+  <hr>
+
+  <h2>1. Classes e Objetos</h2>
+  <p>Uma classe é um <strong>molde</strong> para criar objetos. Ela define propriedades (características) e métodos (comportamentos).</p>
+
+  <pre><code class="language-csharp">
+// Definindo uma classe chamada Carro
+public class Carro
+{
+    // Propriedade pública que armazena o modelo do carro
+    public string Modelo { get; set; }
+
+    // Propriedade pública que armazena a velocidade atual
+    public int Velocidade { get; private set; } 
+
+    // Método que acelera o carro
+    public void Acelerar()
+    {
+        Velocidade += 10; // Aumenta a velocidade em 10
+    }
+}
+  </code></pre>
+
+  <ul>
+    <li><code>public class Carro</code> → definimos uma classe chamada <strong>Carro</strong>.</li>
+    <li><code>public string Modelo { get; set; }</code> → propriedade com <em>getter</em> e <em>setter</em>.</li>
+    <li><code>Velocidade</code> tem <em>getter</em> público e <em>setter</em> privado → apenas a própria classe pode alterar.</li>
+    <li><code>Acelerar()</code> é um método que aumenta a velocidade.</li>
+  </ul>
+
+  <pre><code class="language-csharp">
+// Criando um objeto da classe Carro
+Carro meuCarro = new Carro();
+meuCarro.Modelo = "Fusca";
+meuCarro.Acelerar();
+Console.WriteLine(meuCarro.Velocidade); // 10
+  </code></pre>
+
+  <hr>
+
+  <h2>2. Construtores</h2>
+  <p>Construtores servem para inicializar objetos com valores padrão.</p>
+
+  <pre><code class="language-csharp">
+public class Pessoa
+{
+    public string Nome { get; set; }
+
+    // Construtor
+    public Pessoa(string nome)
+    {
+        Nome = nome; // atribui o valor recebido à propriedade
+    }
+}
+
+Pessoa p = new Pessoa("Maria");
+Console.WriteLine(p.Nome); // Maria
+  </code></pre>
+
+  <blockquote>
+    🔸 Sempre que possível, use construtores para garantir que os objetos nasçam em um estado válido.
+  </blockquote>
+
+  <hr>
+
+  <h2>3. Encapsulamento</h2>
+  <p>Encapsular significa <strong>esconder detalhes internos</strong> e expor apenas o necessário.</p>
+
+  <pre><code class="language-csharp">
+public class ContaBancaria
+{
+    public string Titular { get; private set; }
+    private decimal saldo; // variável privada
+
+    public ContaBancaria(string titular)
+    {
+        Titular = titular;
+        saldo = 0;
+    }
+
+    public void Depositar(decimal valor)
+    {
+        saldo += valor;
+    }
+
+    public void Sacar(decimal valor)
+    {
+        if (valor <= saldo)
+            saldo -= valor;
+        else
+            Console.WriteLine("Saldo insuficiente");
+    }
+
+    public decimal ConsultarSaldo()
+    {
+        return saldo;
+    }
+}
+  </code></pre>
+
+  <p>Assim evitamos que alguém faça algo como:</p>
+  <pre><code class="language-csharp">
+// ERRADO: não queremos que alguém faça isso
+// conta.saldo = -1000;
+  </code></pre>
+
+  <hr>
+
+  <h2>4. Herança</h2>
+  <p>Permite criar classes que reaproveitam código de outras.</p>
+
+  <pre><code class="language-csharp">
+public class Animal
+{
+    public void Comer() => Console.WriteLine("Comendo...");
+}
+
+// A classe Cachorro herda de Animal
+public class Cachorro : Animal
+{
+    public void Latir() => Console.WriteLine("Au au!");
+}
+
+Cachorro c = new Cachorro();
+c.Comer(); // método herdado
+c.Latir(); // método próprio
+  </code></pre>
+
+  <blockquote>
+    ⚠️ Use herança com moderação. Se abusar, o código pode ficar rígido e difícil de manter. Muitas vezes é melhor usar **composição**.
+  </blockquote>
+
+  <hr>
+
+  <h2>5. Polimorfismo</h2>
+  <p>Permite que uma mesma ação tenha comportamentos diferentes em classes derivadas.</p>
+
+  <pre><code class="language-csharp">
+public class Forma
+{
+    public virtual void Desenhar()
+    {
+        Console.WriteLine("Desenhando uma forma...");
+    }
+}
+
+public class Circulo : Forma
+{
+    public override void Desenhar()
+    {
+        Console.WriteLine("Desenhando um círculo...");
+    }
+}
+
+Forma f1 = new Forma();
+Forma f2 = new Circulo();
+
+f1.Desenhar(); // Desenhando uma forma...
+f2.Desenhar(); // Desenhando um círculo...
+  </code></pre>
+
+  <ul>
+    <li><code>virtual</code> → indica que um método pode ser sobrescrito.</li>
+    <li><code>override</code> → sobrescreve o comportamento da classe base.</li>
+  </ul>
+
+  <hr>
+
+  <h2>6. Métodos Estáticos</h2>
+  <p>Métodos estáticos pertencem à classe e não a um objeto específico.</p>
+
+  <pre><code class="language-csharp">
+public static class Matematica
+{
+    public static int Somar(int a, int b)
+    {
+        return a + b;
+    }
+}
+
+int resultado = Matematica.Somar(5, 3);
+Console.WriteLine(resultado); // 8
+  </code></pre>
+
+  <blockquote>
+    📌 Use métodos estáticos quando a operação não depende do estado de um objeto.  
+    Ex: funções auxiliares, validações, cálculos.
+  </blockquote>
+
+  <hr>
+
+  <h2>7. Más práticas vs Boas práticas</h2>
+
+  <pre><code class="language-csharp">
+// Nome ruim e variável sem significado
+int x = 10;
+int y = 20;
+int z = x + y;
+Console.WriteLine(z);
+  </code></pre>
+
+  <p class="bad">Difícil de entender depois de 2 meses...</p>
+
+  <pre><code class="language-csharp">
+// Nome significativo
+int quantidadeDeAlunos = 10;
+int quantidadeDeProfessores = 20;
+int totalPessoas = quantidadeDeAlunos + quantidadeDeProfessores;
+Console.WriteLine(totalPessoas);
+  </code></pre>
+
+  <p class="good">Muito mais legível!</p>
+
+  <blockquote>
+    💡 Nomes ruins, strings mágicas, classes gigantes e métodos confusos quebram os princípios de Clean Code e SOLID.
+  </blockquote>
+
+  <hr>
+
+  <h2>8. Revisão dos princípios SOLID</h2>
+  <ul>
+    <li><strong>S</strong> – Single Responsibility → uma classe = uma responsabilidade.</li>
+    <li><strong>O</strong> – Open/Closed → aberta para extensão, fechada para modificação.</li>
+    <li><strong>L</strong> – Liskov Substitution → classes filhas devem substituir a base sem problemas.</li>
+    <li><strong>I</strong> – Interface Segregation → interfaces específicas, não gigantes.</li>
+    <li><strong>D</strong> – Dependency Inversion → dependa de abstrações, não de implementações.</li>
+  </ul>
+
+  <pre><code class="language-csharp">
+// Exemplo de S - Single Responsibility
+public class RelatorioService
+{
+    public string GerarRelatorio() => "Relatório gerado!";
+}
+
+public class RelatorioPrinter
+{
+    public void Imprimir(string conteudo)
+    {
+        Console.WriteLine($"Imprimindo: {conteudo}");
+    }
+}
+  </code></pre>
+
+  <p>Antes, muita gente colocaria os dois métodos na mesma classe → o que é errado.</p>
+
+  <hr>
+
+  <h2>9. Conclusão</h2>
+  <ul>
+    <li>Classe = molde. Objeto = instância.</li>
+    <li>Construtores ajudam a criar objetos válidos.</li>
+    <li>Encapsule → esconda detalhes internos.</li>
+    <li>Herança e polimorfismo trazem flexibilidade.</li>
+    <li>Métodos estáticos servem para utilidades.</li>
+    <li>Nomeie bem suas variáveis e métodos.</li>
+    <li>Siga SOLID e Clean Code para projetos duradouros.</li>
+  </ul>
+
+  <footer>
+    ✅ Aula completa de revisão de Programação Orientada a Objetos em C#.  
+    Próxima etapa: aplicar esses conceitos em um projeto prático.
+  </footer>
+
+</body>
+</html>
+
+

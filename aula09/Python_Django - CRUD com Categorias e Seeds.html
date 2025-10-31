@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Python/Django - CRUD com Categorias e Seeds</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+    h1 { border-bottom: 3px solid #007acc; padding-bottom: 8px; color: #007acc; }
+    h2 { border-left: 4px solid #007acc; padding-left: 10px; color: #444; }
+    h3 { color: #555; }
+    code { padding: 2px 6px; border-radius: 4px; font-size: 14px;}
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+    ul, ol { margin: 10px 0 20px 25px; }
+    .highlight { background: #fff4c2; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    footer { text-align: center; margin-top: 50px; padding: 20px; font-size: 14px; color: #666; border-top: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+<h1>🧪 Laboratório de Programação Backend</h1>
+<h2>📚 Universidade de Vassouras</h2>
+<h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+<h1>CRUD Django com <span class="highlight">Categorias</span> e <span class="highlight">Tarefas</span></h1>
+
+<p>Nesta aula, vamos criar um CRUD de tarefas (<strong>Todo</strong>) que pertencem a <strong>categorias</strong>. 
+Você também vai aprender a popular o banco de dados (<strong>SQLite</strong>) com dados de teste, tanto manualmente via VSCode quanto usando o shell do Django (seeds).</p>
+
+<hr />
+
+<h2>1️⃣ Criando o Modelo de Categoria e Todo</h2>
+<p>No arquivo <code>todos/models.py</code>:</p>
+<pre><code class="language-python">
+from django.db import models
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Todo(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE,  default=1)
+    is_completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+</code></pre>
+
+<ul>
+  <li><code>ForeignKey(Category, on_delete=models.CASCADE)</code> → indica que cada tarefa pertence a uma categoria. Se a categoria for deletada, as tarefas associadas também serão.</li>
+  <li><code>is_completed</code> é um campo booleano para indicar se a tarefa foi concluída.</li>
+</ul>
+
+<hr />
+
+<h2>2️⃣ Criando e aplicando migrations</h2>
+<p>Após salvar o modelo, crie as migrations e aplique no banco:</p>
+<pre><code class="language-bash">
+python manage.py makemigrations
+python manage.py migrate
+</code></pre>
+
+<hr />
+
+<h2>3️⃣ Inserindo Categorias (Seeds / Dados de Teste)</h2>
+
+<p>Como usamos <strong>SQLite</strong>, o banco do Django fica armazenado no arquivo <code>db.sqlite3</code> dentro do diretório do projeto. Existem duas formas principais de inserir dados de teste: via shell ou manualmente com o VSCode.</p>
+
+<h3>3.1️⃣ Usando o Django Shell (Seeds)</h3>
+<p>O shell é uma forma rápida de criar dados diretamente no banco com Python:</p>
+
+<pre><code class="language-bash">
+python manage.py shell
+</code></pre>
+
+<pre><code class="language-python">
+from todos.models import Category
+
+# Criando categorias de exemplo
+Category.objects.create(nome="Trabalho")
+Category.objects.create(nome="Estudos")
+Category.objects.create(nome="Pessoal")
+
+# Conferir se as categorias foram criadas
+Category.objects.all()
+
+exit()
+</code></pre>
+
+<p>✅ Este método é conhecido como <strong>seed</strong> porque “semeia” dados iniciais no banco.</p>
+
+<hr />
+
+<h3>3.2️⃣ Inserindo Manualmente no Banco via VSCode</h3>
+
+<p>Também é possível inserir as categorias diretamente no banco <code>SQLite</code> usando uma extensão do VSCode:</p>
+
+<ol>
+  <li>Abra o VSCode.</li>
+  <li>No menu lateral esquerdo, vá em <strong>Extensões</strong> (ícone de quadrado).</li>
+  <li>Pesquise por <strong>"SQLite Database Client"</strong> e instale.</li>
+  <li>Depois de instalado, clique com o botão direito no arquivo <code>db.sqlite3</code> e escolha <strong>"Open Database"</strong>.</li>
+  <li>Expanda o banco e localize a tabela <code>todos_categoria</code>.</li>
+  <li>Clique com o botão direito sobre ela e selecione <strong>"New Query"</strong>.</li>
+  <li>Execute o seguinte comando SQL:</li>
+</ol>
+
+<pre><code class="language-sql">
+INSERT INTO todos_category (nome) VALUES 
+('Trabalho'),
+('Estudos'),
+('Pessoal');
+</code></pre>
+
+<blockquote>
+💡 O SQLite não precisa de servidor rodando, pois ele salva os dados dentro do próprio arquivo <code>db.sqlite3</code>.
+Isso significa que qualquer alteração feita via extensão, shell ou Admin aparece automaticamente em todo o projeto.
+</blockquote>
+
+<hr />
+
+<h2>4️⃣ Criando as Views</h2>
+<p>No arquivo <code>todos/views.py</code>:</p>
+
+<pre><code class="language-python">
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Todo, Category
+
+class TodoListView(ListView):
+    model = Todo
+    template_name = "todos/todo_list.html"
+    context_object_name = "todos"
+
+class TodoCreateView(CreateView):
+    model = Todo
+    fields = ["title", "description", "category"]
+    success_url = reverse_lazy("todo_list")
+
+class TodoUpdateView(UpdateView):
+    model = Todo
+    fields = ["title", "description", "category", "is_completed"]
+    success_url = reverse_lazy("todo_list")
+
+class TodoDeleteView(DeleteView):
+    model = Todo
+    success_url = reverse_lazy("todo_list")
+</code></pre>
+
+<hr />
+
+<h2>5️⃣ Ajustando URLs</h2>
+<p>No arquivo <code>todos/urls.py</code>:</p>
+<pre><code class="language-python">
+from django.urls import path
+from todos.views import TodoListView, TodoCreateView, TodoUpdateView, TodoDeleteView
+
+urlpatterns = [
+    path("", TodoListView.as_view(), name="todo_list"),
+    path("create/", TodoCreateView.as_view(), name="todo_create"),
+    path("edit/&lt;int:pk&gt;/", TodoUpdateView.as_view(), name="todo_update"),
+    path("delete/&lt;int:pk&gt;/", TodoDeleteView.as_view(), name="todo_delete"),
+]
+</code></pre>
+
+<hr />
+
+<h2>6️⃣ Template de Listagem</h2>
+<p>No arquivo <code>todos/templates/todos/todo_list.html</code>:</p>
+<pre><code class="language-html">
+&lt;h1&gt;Todo List&lt;/h1&gt;
+&lt;ul&gt;
+{% for todo in todos %}
+  &lt;li&gt;
+    {{ todo.title }} - {{ todo.description }} - Categoria: {{ todo.category.name }} - 
+    &lt;a href="{% url 'todo_update' todo.pk %}"&gt;Edit&lt;/a&gt; - 
+    &lt;a href="{% url 'todo_delete' todo.pk %}"&gt;Delete&lt;/a&gt;
+  &lt;/li&gt;
+{% empty %}
+  &lt;li&gt;No tasks available&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+&lt;a href="{% url 'todo_create' %}"&gt;New Task&lt;/a&gt;
+</code></pre>
+
+<hr />
+
+<h2>7️⃣ Template de Criação/Edição</h2>
+<p>No arquivo <code>todos/templates/todos/todo_form.html</code>:</p>
+<pre><code class="language-html">
+&lt;h1&gt;Add / Edit Task&lt;/h1&gt;
+
+&lt;form method="post"&gt;
+  {% csrf_token %}
+  &lt;label&gt;Title:&lt;/label&gt;
+  {{ form.title }}&lt;br&gt;
+  
+  &lt;label&gt;Description:&lt;/label&gt;
+  {{ form.description }}&lt;br&gt;
+  
+  &lt;label&gt;Category:&lt;/label&gt;
+  {{ form.category }}&lt;br&gt;
+  
+  &lt;label&gt;Completed:&lt;/label&gt;
+  {{ form.is_completed }}&lt;br&gt;
+  
+  &lt;button type="submit"&gt;Save&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+<hr />
+
+<h2>8️⃣ Testando o Projeto</h2>
+<ol>
+  <li>Execute o servidor: <code>python manage.py runserver</code></li>
+  <li>Acesse: <code>http://127.0.0.1:8000/</code></li>
+  <li>Crie novas tarefas e associe-as a categorias já existentes.</li>
+  <li>Edite, conclua e delete tarefas.</li>
+</ol>
+
+<hr />
+
+<h2>9️⃣ 🚀 Dicas Finais</h2>
+<ul>
+  <li>O arquivo <code>db.sqlite3</code> contém todos os dados locais do seu projeto Django.</li>
+  <li>Você pode manipular o banco facilmente com a extensão <strong>SQLite Database Client</strong> no VSCode.</li>
+  <li>Seeds (via shell) são úteis para popular o banco em poucos comandos.</li>
+  <li>Lembre-se de versionar: <code>git add . && git commit -m "feat: CRUD com categorias"</code>.</li>
+</ul>
+
+<footer>
+✅ Agora você tem um CRUD completo de tarefas com categorias no Django, incluindo inserção manual no SQLite, seeds via shell e manipulação visual com VSCode.  
+<strong>Parabéns!</strong> 🚀
+</footer>
+
+</body>
+</html>
