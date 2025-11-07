@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulado 2 – Relacionamento entre Tabelas no Django</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+    h1 { border-bottom: 3px solid #007acc; padding-bottom: 8px; color: #007acc; }
+    h2 { border-left: 4px solid #007acc; padding-left: 10px; color: #444; }
+    h3 { color: #555; }
+    code { padding: 2px 6px; border-radius: 4px; font-size: 14px;  }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+    ul, ol { margin: 10px 0 20px 25px; }
+    .highlight { background: #fff4c2; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    footer { text-align: center; margin-top: 50px; padding: 20px; font-size: 14px; color: #666; border-top: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+<h1>🧪 Simulado 2 – Relacionamento entre Tabelas no Django</h1>
+<h2>📚 Universidade de Vassouras</h2>
+<h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+<h1>Desenvolvendo um CRUD de <span class="highlight">Livros</span> com Relacionamento de <span class="highlight">Autor</span></h1>
+
+<p>Crie um projeto Django com duas tabelas relacionadas: <strong>Autor</strong> e <strong>Livro</strong>.  
+Cada livro pertence a um autor (relação 1:N).  
+Você deve implementar um CRUD para <strong>Livros</strong>, permitindo selecionar o autor no momento da criação ou edição.</p>
+
+<p>O objetivo é entender como trabalhar com <strong>ForeignKey</strong> e relacionamentos entre modelos no Django.</p>
+
+<hr />
+
+<h1>Gabarito</h1>
+
+<h2>1️⃣ Estrutura esperada de pastas e arquivos</h2>
+
+<p>Após criar o projeto, sua estrutura deve seguir o padrão abaixo:</p>
+
+<pre><code class="language-text">
+setup/
+│
+├── manage.py
+├── db.sqlite3
+│
+├── setup/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│
+└── biblioteca/
+    ├── __init__.py
+    ├── apps.py
+    ├── models.py
+    ├── views.py
+    ├── urls.py
+    ├── templates/
+    │   └── biblioteca/
+    │       ├── livro_list.html
+    │       ├── livro_form.html
+    │       └── livro_confirm_delete.html
+    └── migrations/
+        └── __init__.py
+</code></pre>
+
+<blockquote>
+💡 Nome da app: <strong>biblioteca</strong>  
+Entidade principal: <strong>Livro</strong>  
+Relacionamento: <strong>Livro</strong> → <strong>Autor</strong>
+</blockquote>
+
+<hr />
+
+<h2>2️⃣ Criando os Modelos</h2>
+
+<p>No arquivo <code>biblioteca/models.py</code>:</p>
+
+<pre><code class="language-python">
+from django.db import models
+
+class Autor(models.Model):
+    nome = models.CharField(max_length=100)
+    nacionalidade = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return self.nome
+
+class Livro(models.Model):
+    titulo = models.CharField(max_length=100)
+    ano_publicacao = models.PositiveIntegerField()
+    autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.titulo
+</code></pre>
+
+<blockquote>
+📘 Aqui temos um relacionamento 1:N — um autor pode ter vários livros, mas cada livro tem apenas um autor.
+</blockquote>
+
+<hr />
+
+<h2>3️⃣ Criando e aplicando migrations</h2>
+
+<pre><code class="language-bash">
+python manage.py makemigrations
+python manage.py migrate
+</code></pre>
+
+<hr />
+
+<h2>4️⃣ Criando as Views</h2>
+
+<p>Edite o arquivo <code>biblioteca/views.py</code>:</p>
+
+<pre><code class="language-python">
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Livro
+
+class LivroListView(ListView):
+    model = Livro
+    template_name = "biblioteca/livro_list.html"
+    context_object_name = "livros"
+
+class LivroCreateView(CreateView):
+    model = Livro
+    fields = ["titulo", "ano_publicacao", "autor"]
+    success_url = reverse_lazy("livro_list")
+
+class LivroUpdateView(UpdateView):
+    model = Livro
+    fields = ["titulo", "ano_publicacao", "autor"]
+    success_url = reverse_lazy("livro_list")
+
+class LivroDeleteView(DeleteView):
+    model = Livro
+    success_url = reverse_lazy("livro_list")
+</code></pre>
+
+<hr />
+
+<h2>5️⃣ Ajustando URLs</h2>
+
+<p>No arquivo <code>biblioteca/urls.py</code>:</p>
+
+<pre><code class="language-python">
+from django.urls import path
+from biblioteca.views import LivroListView, LivroCreateView, LivroUpdateView, LivroDeleteView
+
+urlpatterns = [
+    path("", LivroListView.as_view(), name="livro_list"),
+    path("create/", LivroCreateView.as_view(), name="livro_create"),
+    path("edit/&lt;int:pk&gt;/", LivroUpdateView.as_view(), name="livro_update"),
+    path("delete/&lt;int:pk&gt;/", LivroDeleteView.as_view(), name="livro_delete"),
+]
+</code></pre>
+
+<p>E no arquivo <code>setup/urls.py</code>:</p>
+
+<pre><code class="language-python">
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('biblioteca.urls')),
+]
+</code></pre>
+
+<hr />
+
+<h2>6️⃣ Templates</h2>
+
+<h3>livro_list.html</h3>
+<pre><code class="language-html">
+&lt;h1&gt;Book List&lt;/h1&gt;
+
+&lt;ul&gt;
+{% for livro in livros %}
+  &lt;li&gt;
+    &lt;strong&gt;{{ livro.titulo }}&lt;/strong&gt; ({{ livro.ano_publicacao }})
+    &lt;br&gt;Author: {{ livro.autor.nome }}
+    &lt;br&gt;
+    &lt;a href="{% url 'livro_update' livro.pk %}"&gt;Edit&lt;/a&gt; |
+    &lt;a href="{% url 'livro_delete' livro.pk %}"&gt;Delete&lt;/a&gt;
+  &lt;/li&gt;
+{% empty %}
+  &lt;li&gt;No books found.&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+&lt;a href="{% url 'livro_create' %}"&gt;Add Book&lt;/a&gt;
+</code></pre>
+
+<h3>livro_form.html</h3>
+<pre><code class="language-html">
+&lt;h1&gt;Add / Edit Book&lt;/h1&gt;
+&lt;form method="post"&gt;
+  {% csrf_token %}
+  {{ form.as_p }}
+  &lt;button type="submit"&gt;Save&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+<h3>livro_confirm_delete.html</h3>
+<pre><code class="language-html">
+&lt;h1&gt;Confirm Delete&lt;/h1&gt;
+&lt;p&gt;Are you sure you want to delete &lt;strong&gt;{{ object.titulo }}&lt;/strong&gt;?&lt;/p&gt;
+
+&lt;form method="post"&gt;
+  {% csrf_token %}
+  &lt;button type="submit"&gt;Yes, Delete&lt;/button&gt;
+  &lt;a href="{% url 'livro_list' %}"&gt;Cancel&lt;/a&gt;
+&lt;/form&gt;
+</code></pre>
+
+<hr />
+
+<h2>7️⃣ Inserindo autores no banco</h2>
+
+<p>Antes de criar livros, é necessário inserir autores. Você pode fazer isso de duas formas:</p>
+
+<h3>🧠 Opção 1: via terminal interativo (shell)</h3>
+<pre><code class="language-bash">
+python manage.py shell
+</code></pre>
+<pre><code class="language-python">
+from biblioteca.models import Autor
+Autor.objects.create(nome="George Orwell", nacionalidade="Britânico")
+Autor.objects.create(nome="J.K. Rowling", nacionalidade="Britânica")
+Autor.objects.create(nome="Machado de Assis", nacionalidade="Brasileiro")
+exit()
+</code></pre>
+
+<h3>🧰 Opção 2: manualmente no SQLite (via VS Code)</h3>
+<ol>
+  <li>Abra o arquivo <code>db.sqlite3</code> no VS Code.</li>
+  <li>Clique em “Open Database” e depois abra a tabela <code>biblioteca_autor</code>.</li>
+  <li>Adicione novos autores manualmente (colunas: nome, nacionalidade).</li>
+</ol>
+
+<blockquote>
+💡 Quando for criar ou editar um livro, os autores aparecerão automaticamente em uma <strong>combo box</strong> no formulário.
+</blockquote>
+
+<hr />
+
+<h2>8️⃣ Gabarito (esperado)</h2>
+
+<ul>
+  <li>App: <code>biblioteca</code></li>
+  <li>Modelos: <code>Autor</code> e <code>Livro</code></li>
+  <li>Views: <code>LivroListView</code>, <code>LivroCreateView</code>, <code>LivroUpdateView</code>, <code>LivroDeleteView</code></li>
+  <li>Relacionamento: <code>Livro.autor = models.ForeignKey(Autor)</code></li>
+  <li>URLs: <code>livro_list</code>, <code>livro_create</code>, <code>livro_update</code>, <code>livro_delete</code></li>
+  <li>Banco de dados: <code>SQLite</code></li>
+</ul>
+
+<footer>
+✅ Este simulado avalia seu domínio de <strong>Foreign Keys</strong> e relacionamentos 1:N em Django.  
+Garanta que os autores existam antes de criar livros e verifique se o combo de seleção está funcionando. 🚀
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+</head>
+<body>
+
+    <h1>Book List</h1>
+
+    <ul>
+        {% for livro in livros %}
+
+        <li>
+            <strong>{{ livro.titulo }}</strong> ({{ livro.ano_publicacao }})
+            <br>Author: {{ livro.autor.nome }}
+            <br>
+            <a href="{% url 'livro_update' livro.pk %}">Edit</a> |
+            <a href="{% url 'livro_delete' livro.pk %}">Delete</a>
+        </li>
+
+        {% empty %}
+
+        <li>No books found.</li>
+
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'livro_create' %}">Add Book</a>
+    
+</body>
+</html>

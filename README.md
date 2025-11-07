@@ -26,6 +26,7 @@ Estudo de Back End, com Python e Django.
 <br>
 
 * [**Simulado 01** - CRUD](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/simulado01)
+* [**Simulado 02** - CRUD, ForeignKey e relacionamentos](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/simulado02)
 
 <br>
 
