@@ -25,6 +25,10 @@ Estudo de Back End, com Python e Django.
 
 <br>
 
+* [**Simulado 01** - CRUD](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/simulado01)
+
+<br>
+
 ## Iniciando um novo projeto Django:
 
 <br>

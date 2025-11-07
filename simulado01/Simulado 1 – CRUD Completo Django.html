@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulado 1 – CRUD Completo Django</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+    h1 { border-bottom: 3px solid #007acc; padding-bottom: 8px; color: #007acc; }
+    h2 { border-left: 4px solid #007acc; padding-left: 10px; color: #444; }
+    h3 { color: #555; }
+    code { padding: 2px 6px; border-radius: 4px; font-size: 14px;  }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+    ul, ol { margin: 10px 0 20px 25px; }
+    .highlight { background: #fff4c2; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    footer { text-align: center; margin-top: 50px; padding: 20px; font-size: 14px; color: #666; border-top: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+
+<h1>🧪 Simulado 1 – CRUD Completo no Django</h1>
+<h2>📚 Universidade de Vassouras</h2>
+<h3>👨‍🏫 Prof. Rodrigo Ximenes</h3>
+
+<h1>Desenvolvendo um CRUD Completo de <span class="highlight">Produtos</span></h1>
+
+<p>Criar um projeto Django do zero, implementando um <strong>CRUD completo</strong> (listar, adicionar, editar e deletar) para a entidade <strong>Produto</strong>.  
+O objetivo é testar seus conhecimentos em <em>modelos, views, templates e URLs</em>.</p>
+
+<p>Produtos possuem nome, marca, data de fabricação, preço, entre outros atributos.
+Fique livre para determinar como será seu modelo.</p>
+
+<p>Tente fazer sem consultar o gabarito.</p>
+
+<h1>Gabarito</span></h1>
+
+<hr />
+<h2>1️⃣ Estrutura esperada de pastas e arquivos</h2>
+
+<p>Após criar o projeto, sua estrutura deve seguir o seguinte padrão:</p>
+
+<pre><code class="language-text">
+setup/
+│
+├── manage.py
+├── db.sqlite3
+│
+├── setup/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│
+└── produtos/
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── models.py
+    ├── views.py
+    ├── urls.py
+    ├── templates/
+    │   └── produtos/
+    │       ├── produto_list.html
+    │       ├── produto_form.html
+    │       └── produto_confirm_delete.html
+    └── migrations/
+        └── __init__.py
+</code></pre>
+
+<blockquote>
+💡 Certifique-se de nomear a app como <strong>produtos</strong> e usar nomes de arquivos exatamente como indicados acima.
+</blockquote>
+
+<hr />
+
+<h2>2️⃣ Criando o Modelo</h2>
+
+<p>Edite o arquivo <code>produtos/models.py</code> e crie o modelo <code>Produto</code>:</p>
+
+<pre><code class="language-python">
+from django.db import models
+
+class Produto(models.Model):
+    nome = models.CharField(max_length=100)
+    preco = models.DecimalField(max_digits=8, decimal_places=2)
+    descricao = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.nome
+</code></pre>
+
+<hr />
+
+<h2>3️⃣ Criando e aplicando migrations</h2>
+
+<pre><code class="language-bash">
+python manage.py makemigrations
+python manage.py migrate
+</code></pre>
+
+<hr />
+
+<h2>4️⃣ Criando as Views</h2>
+
+<p>Edite o arquivo <code>produtos/views.py</code> e adicione as class-based views:</p>
+
+<pre><code class="language-python">
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import Produto
+
+class ProdutoListView(ListView):
+    model = Produto
+    template_name = "produtos/produto_list.html"
+    context_object_name = "produtos"
+
+class ProdutoCreateView(CreateView):
+    model = Produto
+    fields = ["nome", "preco", "descricao"]
+    success_url = reverse_lazy("produto_list")
+
+class ProdutoUpdateView(UpdateView):
+    model = Produto
+    fields = ["nome", "preco", "descricao"]
+    success_url = reverse_lazy("produto_list")
+
+class ProdutoDeleteView(DeleteView):
+    model = Produto
+    success_url = reverse_lazy("produto_list")
+</code></pre>
+
+<hr />
+
+<h2>5️⃣ Ajustando URLs</h2>
+<p>No arquivo <code>produtos/urls.py</code>:</p>
+<pre><code class="language-python">
+from django.urls import path
+from produtos.views import ProdutoListView, ProdutoCreateView, ProdutoUpdateView, ProdutoDeleteView
+
+urlpatterns = [
+    path("", ProdutoListView.as_view(), name="produto_list"),
+    path("create/", ProdutoCreateView.as_view(), name="produto_create"),
+    path("edit/&lt;int:pk&gt;/", ProdutoUpdateView.as_view(), name="produto_update"),
+    path("delete/&lt;int:pk&gt;/", ProdutoDeleteView.as_view(), name="produto_delete"),
+]
+</code></pre>
+
+<p>E no arquivo <code>setup/urls.py</code>:</p>
+<pre><code class="language-python">
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('produtos.urls')),
+]
+</code></pre>
+
+<hr />
+
+<h2>6️⃣ Templates</h2>
+
+<h3>produto_list.html</h3>
+<pre><code class="language-html">
+&lt;h1&gt;Product List&lt;/h1&gt;
+
+&lt;ul&gt;
+{% for produto in produtos %}
+  &lt;li&gt;
+    {{ produto.nome }} - R$ {{ produto.preco }} 
+    &lt;br&gt;{{ produto.descricao }}
+    &lt;br&gt;
+    &lt;a href="{% url 'produto_update' produto.pk %}"&gt;Edit&lt;/a&gt; | 
+    &lt;a href="{% url 'produto_delete' produto.pk %}"&gt;Delete&lt;/a&gt;
+  &lt;/li&gt;
+{% empty %}
+  &lt;li&gt;No products found.&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+&lt;a href="{% url 'produto_create' %}"&gt;New Product&lt;/a&gt;
+</code></pre>
+
+<h3>produto_form.html</h3>
+<pre><code class="language-html">
+&lt;h1&gt;Add / Edit Product&lt;/h1&gt;
+&lt;form method="post"&gt;
+  {% csrf_token %}
+  {{ form.as_p }}
+  &lt;button type="submit"&gt;Save&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+<h3>produto_confirm_delete.html</h3>
+<pre><code class="language-html">
+&lt;h1&gt;Confirm Delete&lt;/h1&gt;
+&lt;p&gt;Are you sure you want to delete &lt;strong&gt;{{ object.nome }}&lt;/strong&gt;?&lt;/p&gt;
+
+&lt;form method="post"&gt;
+  {% csrf_token %}
+  &lt;button type="submit"&gt;Yes, Delete&lt;/button&gt;
+  &lt;a href="{% url 'produto_list' %}"&gt;Cancel&lt;/a&gt;
+&lt;/form&gt;
+</code></pre>
+
+<hr />
+
+<h2>7️⃣ Testando o CRUD</h2>
+
+<ol>
+  <li>Rode o servidor com <code>python manage.py runserver</code></li>
+  <li>Acesse <code>http://127.0.0.1:8000/</code></li>
+  <li>Crie, edite e delete produtos</li>
+  <li>Verifique que tudo está funcionando corretamente</li>
+</ol>
+
+<hr />
+
+<h2>8️⃣ Gabarito (esperado)</h2>
+
+<ul>
+  <li>App: <code>produtos</code></li>
+  <li>Model principal: <code>Produto</code></li>
+  <li>Views: <code>ProdutoListView</code>, <code>ProdutoCreateView</code>, <code>ProdutoUpdateView</code>, <code>ProdutoDeleteView</code></li>
+  <li>URLs: <code>produto_list</code>, <code>produto_create</code>, <code>produto_update</code>, <code>produto_delete</code></li>
+  <li>Banco de dados: <code>SQLite</code> (db.sqlite3)</li>
+</ul>
+
+<footer>
+✅ Este simulado avalia sua capacidade de estruturar um CRUD completo no Django usando <strong>Class-Based Views</strong>.  
+Certifique-se de nomear tudo corretamente e seguir a estrutura de pastas indicada. 🚀
+</footer>
+
+</body>
+</html>
