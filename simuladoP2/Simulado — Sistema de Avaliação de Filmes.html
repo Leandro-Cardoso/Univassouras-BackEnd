@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulado — Sistema de Avaliação de Filmes</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+
+    h3 {
+      color: #555;
+    }
+
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎬 Simulado — Sistema de Avaliação de Filmes</h1>
+  <h2>📅 Contexto: Aplicação para Avaliar Filmes</h2>
+
+  <blockquote>
+    Este simulado tem o objetivo de revisar os principais conceitos de Python e Django, preparando o aluno para a prova prática.  
+    O sistema proposto é um <strong>Portal de Avaliação de Filmes</strong>, onde usuários podem cadastrar, visualizar, editar e excluir informações sobre filmes.
+  </blockquote>
+
+  <h2>📋 Instruções Gerais</h2>
+  <ul>
+    <li>Trabalho individual.</li>
+    <li>Entregue um <strong>PDF com as evidências de cada questão</strong>: código e print da tela resultante.</li>
+    <li>Se houver erro, o print pode ser incluído também.</li>
+    <li>Envie o PDF no <strong>AVA</strong> dentro do prazo estipulado.</li>
+    <li>Cada questão vale <strong>2 pontos</strong> (total de 10 pontos).</li>
+    <li>Todo o conteúdo foi abordado nas aulas teóricas e práticas.</li>
+  </ul>
+
+  <h2>🧠 Conteúdo Avaliado</h2>
+  <ul>
+    <li>Criação de projeto e app Django.</li>
+    <li>Modelos e migrações no banco de dados.</li>
+    <li>Class-Based Views (ListView, CreateView, UpdateView, DeleteView).</li>
+    <li>Templates e formulários.</li>
+    <li>Configuração de URLs e integração com banco.</li>
+  </ul>
+
+  <h2>💻 Estrutura Esperada</h2>
+  <ul>
+    <li>Projeto: <strong>setup</strong></li>
+    <li>Aplicação: <strong>filmes</strong></li>
+  </ul>
+
+  <h2>📚 Questões</h2>
+
+  <h3>1️⃣ Questão 1 — Criar a Model</h3>
+  <p>
+    Crie o modelo <strong>Filme</strong> com os seguintes campos:
+  </p>
+  <ul>
+    <li><strong>titulo</strong> — texto de até 100 caracteres</li>
+    <li><strong>diretor</strong> — texto de até 80 caracteres</li>
+    <li><strong>nota</strong> — número inteiro entre 0 e 10</li>
+  </ul>
+  <p>
+    Gere e aplique as migrações correspondentes.  
+    Inclua no PDF o código da model e um print do comando de migração executado com sucesso.
+  </p>
+
+  <h3>2️⃣ Questão 2 — Criar a View de Listagem</h3>
+  <p>
+    Crie uma <strong>Class-Based View</strong> responsável por listar todos os filmes cadastrados.  
+    Inclua no PDF:
+  </p>
+  <ul>
+    <li>O código da view.</li>
+    <li>Print da tela exibindo a lista de filmes (mesmo vazia).</li>
+  </ul>
+
+  <h3>3️⃣ Questão 3 — Criar a View de Adição</h3>
+  <p>
+    Implemente uma <strong>View para adicionar novos filmes</strong>, com um formulário que permita preencher os campos exigidos.  
+    Inclua no PDF:
+  </p>
+  <ul>
+    <li>O código da view e do template.</li>
+    <li>Print do formulário aberto.</li>
+    <li>Print da listagem mostrando o novo filme cadastrado.</li>
+  </ul>
+
+  <h3>4️⃣ Questão 4 — Criar a View de Edição</h3>
+  <p>
+    Crie uma <strong>View para editar as informações de um filme</strong>.  
+    Inclua no PDF:
+  </p>
+  <ul>
+    <li>O código da view.</li>
+    <li>Print do formulário com os dados do filme sendo editado.</li>
+    <li>Print da listagem mostrando o filme atualizado.</li>
+  </ul>
+
+  <h3>5️⃣ Questão 5 — Criar a View de Exclusão</h3>
+  <p>
+    Adicione uma <strong>View para excluir um filme</strong>, com uma página de confirmação antes da exclusão definitiva.  
+    Inclua no PDF:
+  </p>
+  <ul>
+    <li>O código da view e do template de confirmação.</li>
+    <li>Print da tela antes e depois da exclusão.</li>
+  </ul>
+
+  <h2>💾 Dica de Organização</h2>
+  <ul>
+    <li>Teste cada etapa antes de passar para a próxima questão.</li>
+    <li>Organize bem o PDF final, com prints legíveis e código formatado.</li>
+  </ul>
+
+  <h2>📤 Entrega</h2>
+  <ul>
+    <li>Formato: <strong>PDF</strong></li>
+    <li>Conteúdo: código + prints de cada questão</li>
+    <li>Envio: <strong>AVA</strong></li>
+    <li>Peso total: <strong>10 pontos</strong></li>
+  </ul>
+
+  <footer>
+    🎬 Este simulado revisa os fundamentos essenciais de Python e Django, com foco em operações CRUD.  
+    Teste suas habilidades, pratique e revise os conceitos antes da prova.  
+    Boa sorte! 🍀
+  </footer>
+
+</body>
+</html>
