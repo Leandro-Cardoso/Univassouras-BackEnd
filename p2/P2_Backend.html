@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>🧩 Prova Prática — Backend com Django (CRUD de Produtos)</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 20px 40px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      border-bottom: 3px solid #007acc;
+      padding-bottom: 8px;
+      color: #007acc;
+    }
+
+    h2 {
+      border-left: 4px solid #007acc;
+      padding-left: 10px;
+      color: #444;
+    }
+
+    h3 {
+      color: #555;
+    }
+
+    code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    blockquote {
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      background: #eef6fb;
+      margin: 15px 0;
+      font-style: italic;
+      color: #333;
+    }
+
+    ul, ol {
+      margin: 10px 0 20px 25px;
+    }
+
+    .highlight {
+      background: #fff4c2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      font-size: 14px;
+      color: #666;
+      border-top: 1px solid #ccc;
+    }
+
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧩 Prova Prática — Backend com Django</h1>
+  <h2>CRUD Completo de Produtos</h2>
+
+  <h3>🎯 Objetivo</h3>
+  <p>Desenvolver um sistema web em Django que implemente o <strong>CRUD completo (Create, Read, Update e Delete)</strong> de produtos, com os seguintes campos:</p>
+  <ul>
+    <li><strong>name</strong> — Nome do produto</li>
+    <li><strong>category</strong> — Categoria do produto</li>
+    <li><strong>price</strong> — Preço do produto</li>
+  </ul>
+
+  <blockquote>
+    💡 O projeto deve se chamar <code>setup</code> e a aplicação (app) deve se chamar <code>products</code>.
+  </blockquote>
+
+
+  <h2>🧱 Requisitos Técnicos</h2>
+  <ul>
+    <li>O projeto deve utilizar <strong>Class-Based Views</strong> (<code>ListView</code>, <code>CreateView</code>, <code>UpdateView</code>, <code>DeleteView</code>).</li>
+    <li>O banco de dados deve ser o <strong>SQLite padrão do Django</strong>.</li>
+    <li>Os templates devem permitir a navegação entre todas as operações do CRUD.</li>
+    <li>O sistema deve permitir:
+      <ul>
+        <li><strong>Adicionar</strong> produtos</li>
+        <li><strong>Listar</strong> produtos</li>
+        <li><strong>Editar</strong> produtos</li>
+        <li><strong>Excluir</strong> produtos</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>🧾 Forma de Entrega</h2>
+  <p>O aluno deverá entregar um arquivo em formato <strong>PDF</strong> contendo as <strong>evidências de cada questão</strong> com código e prints das telas que resultaram na execução.</p>
+
+  <ul>
+    <li><strong>Questão 1 (2 pts):</strong> Código e print da tela de <strong>listagem</strong> de produtos (<code>ListView</code>).</li>
+    <li><strong>Questão 2 (2 pts):</strong> Código e print da tela de <strong>criação</strong> de produtos (<code>CreateView</code>).</li>
+    <li><strong>Questão 3 (2 pts):</strong> Código e print da tela de <strong>edição</strong> de produtos (<code>UpdateView</code>).</li>
+    <li><strong>Questão 4 (2 pts):</strong> Código e print da tela de <strong>exclusão</strong> de produtos (<code>DeleteView</code>).</li>
+  </ul>
+
+  <blockquote>
+    Caso o aluno enfrente algum erro, o print do erro também pode ser incluído no PDF, acompanhado de uma breve explicação.
+  </blockquote>
+
+  <h2>📤 Envio</h2>
+  <ul>
+    <li>O arquivo PDF deve ser enviado exclusivamente pelo <strong>AVA</strong>.</li>
+    <li>Nome do arquivo: <code>Prova_Backend_NomeCompleto.pdf</code></li>
+    <li>Entrega dentro do prazo informado pelo professor.</li>
+  </ul>
+
+  <h2>🧮 Avaliação</h2>
+  <ul>
+    <li>Cada questão vale <strong>2 pontos</strong>.</li>
+    <li>Critérios de avaliação:
+      <ul>
+        <li>Organização e clareza do código.</li>
+        <li>Funcionamento correto de cada operação CRUD.</li>
+        <li>Qualidade da explicação e dos prints apresentados.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>📘 Observações Importantes</h2>
+  <ul>
+    <li>O aluno pode <strong>consultar o material dado em sala</strong>.</li>
+    <li>Não é necessário enviar o projeto compactado, apenas o PDF.</li>
+  </ul>
+
+</body>
+</html>

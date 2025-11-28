@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+</head>
+<body>
+
+    <h1>Produtos</h1>
+
+    <ul>
+        {% for produto in produtos %}
+        <li>
+            {{ produto.name }} ({{ produto.category }}) - R$ {{ produto.price }}
+            <br><a href="{% url 'produto_update' produto.pk %}">Editar</a> | 
+            <a href="{% url 'produto_delete' produto.pk %}">Apagar</a>
+            <br><br>
+        </li>
+        {% empty %}
+        <li>Nenhum produto cadastrado.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'produto_create' %}">Adicionar Produto</a>
+
+</body>
+</html>

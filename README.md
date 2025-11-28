@@ -30,6 +30,10 @@ Estudo de Back End, com Python e Django.
 
 <br>
 
+* [**P2**](https://github.com/Leandro-Cardoso/Univassouras-BackEnd/tree/main/p2)
+
+<br>
+
 ## Iniciando um novo projeto Django:
 
 <br>
